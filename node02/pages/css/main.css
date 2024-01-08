@@ -1,0 +1,43 @@
+body{
+  background-image: url(../images/bg.jpg);
+  height: 100svh;
+  background-size: cover;
+}
+.row{
+    display: flex;
+    width: 180px;
+  }
+  .col{
+    width: 60px;
+    height: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    user-select: none;
+    cursor: pointer;
+  }
+  .col:not(:first-child){
+    border-left: 1px solid #000;
+  }
+  .row:nth-child(odd){
+    background-color: #00fff2;
+  }
+  .row:nth-child(even){
+    background-color: #0099ff;
+  }
+  .active{
+    background-color: #3af103;
+    color: #fff;
+  }
+  .active:nth-child(even){
+    background-color: #1b03f1;
+    color: #fff;
+  }
+  .row:nth-child(even) .active{
+    background-color: #1b03f1;
+    color: #fff;
+  }
+  .row:nth-child(even) .active:nth-child(even){
+    background-color: #3af103;
+    color: #fff;
+  }
