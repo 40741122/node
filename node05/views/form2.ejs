@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css">
+    <title>上傳用表單2</title>
+</head>
+<body>
+    <div class="container my-3">
+        <form action="/upload2" method="post" enctype="multipart/form-data">
+            <div class="input-group input-group-lg mb-2">
+                <span class="input-group-text">名稱</span>
+                <input type="text" class="form-control" name="name">
+            </div>
+            <div class="input-group mb-2">
+                <input type="file" class="form-control" name="myFile" multiple>
+            </div>
+            <div class="d-flex">
+                <button type="submit" class="btn btn-primary ms-auto">送出</button>
+            </div>
+        </form>
+    </div>
+
+    <script src="/bootstrap/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
