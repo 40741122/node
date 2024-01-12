@@ -1,30 +1,13 @@
 import express from 'express';
 import {dirname, resolve, join, extname} from 'path';
 import {fileURLToPath} from 'url';
-import multer from 'multer';
-import {renameSync} from 'fs';
+import formidable from 'formidable';
 
 const __dirname= dirname(fileURLToPath(import.meta.url));
 
-const storage = multer.diskStorage({
-    destination: function(req, file, cb){
-        cb(null, resolve(__dirname, "public/upload"));
-    },
-    filename: function(req, file, cb){
-        if(!req.timestamp){
-            req.timestamp = Date.now();
-            req.index = 0;
-        }else{
-            req.index++;
-        }
-        let newName = (req.timestamp + req.index) + extname(file.originalname);
-        cb(null, newName);
-    }
-});
-
-const upload =multer({storage: storage});
-
 const app = express();
+
+app.use(express.static(resolve(__dirname, "public")))
 
 app.set("view engine", "ejs");
 app.set("views", resolve(__dirname, "views"));
@@ -44,12 +27,35 @@ app.get("/form2", (req, res)=>{
     res.render("form2");
 })
 
-app.get("/form3", (req, res)=>{
-    res.render("form3");
+app.post("/upload1", (req, res, next)=>{
+    const form = formidable({
+        uploadDir: resolve(__dirname, "public/upload"),
+        keepExtensions: true
+    });
+
+    form.parse(req, (error, fields, files)=>{
+        if(error){
+            next(error);
+            return false;
+        }
+        res.json({fields, files});
+    });
 })
 
-app.post("/upload1", upload.single("myFile"), (req, res)=>{
-    res.json({body: req.body, file: req.file})
+app.post("/upload2", (req, res, next)=>{
+    const form = formidable({
+        uploadDir: resolve(__dirname, "public/upload"),
+        keepExtensions: true,
+        multiples: true
+    });
+
+    form.parse(req, (error, fields, files)=>{
+        if(error){
+            next(error);
+            return false;
+        }
+        res.json({fields, files});
+    });
 })
 
 app.listen(3000, ()=>{

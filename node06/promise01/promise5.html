@@ -1,0 +1,31 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <title>a</title>
+</head>
+<body>
+    <script>
+        
+        (async ()=>{
+            let aaaa = await fetchData();
+            console.log(aaaa);
+        })();
+
+        function fetchData(){
+            let file = "./scenic_spot_C_f.json";
+            return new Promise((resolve, reject) => {
+                $.getJSON(file, (e) => {
+                    let data = e.XML_Head.Infos.Info;
+                    resolve(data);
+                }).fail((aaa,bbb,error)=>{
+                    reject(error);
+                })
+            });
+        }
+    </script>
+</body>
+</html>

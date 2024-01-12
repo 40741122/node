@@ -1,0 +1,120 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        .area{
+            position: relative;
+            height: 500px;
+        }
+        .circle{
+            position: absolute;
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background-color: #db8f8f;
+            left: 50px;
+            top: 50px;
+
+        }
+        .circle.active{
+            animation-name: ani1;
+            animation-duration: 4s;
+            animation-iteration-count: 1;
+            animation-fill-mode: forwards;
+        }
+        .block{
+            position: absolute;
+            width: 100px;
+            height: 100px;
+            background-color: #cc2626;
+            right: 10px;
+            bottom: 150px;
+        }
+        .block.active{
+            animation-name: ani2;
+            animation-duration: 4s;
+            animation-iteration-count: 1;
+            animation-fill-mode: forwards;
+        }
+        .btn{
+            background-color: #464040;
+            color: #fff;
+            position: absolute;
+            right: 0;
+            bottom: 0;
+            padding: 12px;
+            padding-left: 20px;
+            padding-right: 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            user-select: none;
+        }
+        @keyframes ani1{
+            0%{left: 50px;}
+            100%{left: calc(100% - 100px);}
+        }
+        @keyframes ani2{
+            0%{right: 10px;}
+            100%{right: calc(100% - 100px);}
+        }
+    </style>
+    <title>Document</title>
+</head>
+<body>
+    <div class="area">
+        <div class="circle"></div>
+        <div class="block"></div>
+        <div class="btn">GO</div>
+    </div>
+    <script>
+        const circle = document.querySelector(".circle");
+        const block = document.querySelector(".block");
+        const btn = document.querySelector(".btn");
+        const area = document.querySelector(".area");
+
+        btn.addEventListener("click", async ()=>{
+            circle.classList.add("active");
+            await waitForEnd(circle);
+            await waitting(2000);
+            block.classList.add("active");
+            await waitForEnd(block);
+            await waitting(2000);
+            area.append("THE END");
+        });
+
+
+        // btn.addEventListener("click", ()=>{
+        //     circle.classList.add("active");
+        //     circle.addEventListener("animationend", ()=>{
+        //         setTimeout(()=>{
+        //             block.classList.add("active");
+        //             block.addEventListener("animationend", ()=>{
+        //                 setTimeout(()=>{
+        //                     area.append("THE END")
+        //                 }, 2000)
+        //             })
+        //         }, 3000)
+        //     })
+        // })
+
+        function waitForEnd(target){
+            return new Promise(resolve=>{
+                target.addEventListener("animationend", ()=>{
+                    resolve();
+                })
+            })
+        }
+
+        function waitting(time){
+            return new Promise(resolve=>{
+                setTimeout(() => {
+                    resolve();
+                }, time);
+            });
+        }
+    </script>
+</body>
+</html>
