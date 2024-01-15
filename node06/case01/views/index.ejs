@@ -67,22 +67,31 @@
       <div class="btn btn-primary btn-sm fs-6 sort">分類</div>
       <div class="btn btn-primary btn-sm fs-6 money text-end pe-2">金額</div>
     </div>
-    <div class="unit fs-6">
-      <div class="sn ps-2">#</div>
-      <div class="title">TITLE</div>
-      <div class="sort">SORT</div>
-      <div class="money text-end pe-2">999</div>
+    <%
+      let totalMoney = 0;
+      dateData.forEach((item, index)=>{
+        totalMoney += item.money;
+        let sortName = sort.find(ss=>{
+          return (ss.id === item.sort);
+        }).name
+    %>
+    <div class="unit fs-6 list" id="<%=item.id%>" title="<%=item.title%>" sort="<%=item.sort%>" money="<%=item.money%>">
+      <div class="sn ps-2"><%=index+1%></div>
+      <div class="title"><%=item.title%></div>
+      <div class="sort"><%=sortName%></div>
+      <div class="money text-end pe-2"><%=item.money%></div>
     </div>
+    <% }) %>
     <div class="bg-primary mt-2 text-white rounded-bottom">
       <div class="text-end pe-2 text-white fs-3">
-        8888
+        <%=totalMoney%>
       </div>
     </div>
   </div>
   <div class="offcanvas offcanvas-start" data-bs-scroll="false" data-bs-backdrop="static" tabindex="-1" id="inputArea"
     aria-labelledby="offcanvasWithBothOptionsLabel">
     <div class="offcanvas-body">
-      <form action="/expe" method="post">
+      <form action="/expense" method="post">
         <div class="input-group input-group-lg mb-2">
           <span class="input-group-text">消費名稱</span>
           <input type="text" name="title" class="form-control">
@@ -95,10 +104,12 @@
           <span class="input-group-text">消費分類</span>
           <select name="sort" class="form-select">
             <option value selected disabled>請選擇</option>
-            <option value="1">食物</option>
+            <% sort.forEach((item)=>{ %>
+            <option value="<%=item.id%>"><%=item.name%></option>
+            <% }) %>
           </select>
         </div>
-        <input type="hidden" name="date" value="">
+        <input type="hidden" name="date" value="<%=date%>">
         <input type="hidden" name="id">
         <div class="newSet mb-2 d-flex">
           <div class="btn btn-lg btn-success me-2 ms-auto btn-end">結束輸入</div>

@@ -1,0 +1,18 @@
+{
+  "name": "testarg",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dex": "nodemon index.mjs true",
+    "dist": "nodemon index.mjs false"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "^16.3.1",
+    "mysql2": "^3.7.0"
+  }
+}

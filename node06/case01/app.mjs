@@ -7,7 +7,7 @@ import { fileURLToPath } from 'url';
 
 import indexRouter from './routes/index.mjs';
 import usersRouter from './routes/users.mjs';
-import expenseRouter from './routes/expense.mjs';
+import expenseRouter from './routes/expense2.mjs';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
