@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Bootstrap demo</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+  </head>
+  <body>
+    <div class="container p-3">
+      <div class="form1">
+        <div class="input-group mb-3">
+            <span class="input-group-text">ID</span>
+            <input type="text" class="form-control" name="userID">
+        </div>
+        <div class="input-group mb-3">
+            <span class="input-group-text">PWD</span>
+            <input type="password" class="form-control" name="userPWD">
+        </div>
+        <div class="d-flex">
+            <button class="btn btn-primary ms-auto btn-send" type="submit">送出</button>
+        </div>       
+      </div>
+      <div class="login d-none">
+        <div class="d-flex">
+          <div class="img">
+            <img src="" alt="">
+          </div>
+          <div class="content">
+            <h1>USER_NAME</h1>
+            <div class="btn btn-primary ms-auto btn-logout">登出</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+    <script>
+      const btnSEND = document.querySelector(".btn-send");
+      const btnLogout = document.querySelector(".btn-logout");
+      let user;
+
+      btnSEND.addEventListener("click", e => {
+        e.preventDefault();
+        let formData = new FormData();
+        formData.append("userID", document.querySelector("[name=userID]").value);
+        formData.append("userPWD", document.querySelector("[name=userPWD]").value)
+        for(let [key, value] of formData.entries()){
+          console.log(`${key}: ${value}`);
+        }
+
+        let url = "http://localhost:3000";
+        fetch(url, {
+          method: "POST",
+          body: formData,
+          credentials: "include"
+        }).then(response => {
+          return response.json();
+        }).then(results => {
+          init();
+        }).catch(error => {
+          console.log(error);
+        });
+      })
+
+      btnLogout.addEventListener("click", e => {
+        let url = "http://localhost:3000/logout";
+        fetch(url, {
+          method: "GET",
+          credentials: "include",
+        }).then(response => {
+          return response.json();
+        }).then(results => {
+          user = undefined;
+          init();
+        }).catch(err => {
+          console.log(err);
+        })
+      })
+
+      init();
+      
+      async function init(){
+        
+        user = await checkLogin();
+
+        if(user){
+          document.querySelector(".login h1").innerHTML = `你好, ${user.name}`;
+          document.querySelector(".login .img img").setAttribute("src", user.img);
+          document.querySelector(".login").classList.remove("d-none");
+          document.querySelector(".form1").classList.add("d-none");
+        }else{
+          document.querySelector(".login").classList.add("d-none");
+          document.querySelector(".form1").classList.remove("d-none");
+        }
+      };
+
+      function checkLogin(){
+        let url = "http://localhost:3000/checkLogin";
+        return new Promise((reslove, reject) => {
+          fetch(url, {
+            method: "GET",
+            credentials: "include",
+          }).then(response => {
+            return response.json();
+          }).then(results => {
+            reslove(results.user);
+          }).catch(error => {
+            console.log(error);
+            reject(undefined);
+          })
+        });
+      }
+    </script>
+  </body>
+</html>
