@@ -2,7 +2,8 @@ import express from 'express';
 import cors from 'cors';
 import multer from 'multer';
 import session from 'express-session';
-import db from './db.mjs';
+// T import db from './db.mjs';
+import db2 from './db2.mjs';
 
 const upload = multer();
 
@@ -35,25 +36,18 @@ app.get('/', (req, res) => {
 	res.send('首頁');
 });
 
-app.post('/', upload.none(), (req, res) => {
+app.post('/', upload.none(), async (req, res) => {
 	const {userID, userPWD} = req.body;
-	db.execute(
-		'SELECT * FROM users WHERE uid = ? AND pwd = ?',
-		[userID, userPWD],
-		(err, results) => {
-			console.log(results);
-			if (err) {
-				console.error(err);
-				res.json({message: 'failed'});
-			} else if (results.length > 0) {
-				const user = results[0];
-				req.session.user = user;
-				res.json({message: 'welcome', user});
-			} else {
-				res.json({message: 'failed'});
-			}
-		},
-	);
+	const [users] = await db2.execute('SELECT * FROM `users` WHERE `uid` = ? AND `pwd` = ?', [userID, userPWD]);
+	console.log(users);
+	if (users && users[0].pwd === userPWD) {
+		const {pwd, ...user} = users[0];
+		user.id = userID;
+		req.session.user = user;
+		res.json({message: 'welcome', user});
+	} else {
+		res.json({message: 'faild'});
+	}
 });
 
 app.get('/checkLogin', (req, res) => {
